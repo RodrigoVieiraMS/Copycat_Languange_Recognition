@@ -1,0 +1,81 @@
+; Lista de Estados ( separados por virgula )
+q0,q1,q2,q3,q4,q5,q6,q7,q_aceita,q_rejeita
+; Alfabeto de Entrada e Alfabeto da Fita
+a,b
+a,b,X,Y,U,V,Z,B
+; Simbolo de Branco
+B
+; Estado Inicial
+q0
+; Estados Finais ( Aceitacao / Parada )
+q_aceita
+; Regras de Transicao ( Origem , Le , Escreve , Direcao [ R/ L/S ], Destino )
+; =====================================================================
+; Maquina para L = { ww | w em {a,b}* }   (Equipe 4)
+;
+; Marcas usadas sobre a propria entrada:
+;   X = 'a' da 1a metade      Y = 'b' da 1a metade
+;   U = 'a' da 2a metade      V = 'b' da 2a metade
+;   Z = posicao ja comparada
+;
+; FASE 1 - achar o meio: marca o 1o simbolo livre da esquerda (X/Y)
+;          e o ultimo simbolo livre da direita (U/V), repetindo.
+;          Se sobrar um simbolo sem par => tamanho impar => rejeita.
+; FASE 2 - comparar: pega o 1o simbolo da 1a metade, lembra no estado
+;          (q6 = 'a', q7 = 'b'), e confere com o 1o nao comparado da
+;          2a metade. Iguais => marca ambos com Z e repete.
+; =====================================================================
+; --- q0: marca o primeiro simbolo livre da esquerda -------------------
+q0,B,B,S,q_aceita
+q0,a,X,R,q1
+q0,b,Y,R,q1
+q0,U,U,L,q4
+q0,V,V,L,q4
+; --- q1: vai ate o fim da fita (pulando livres e ja marcados da dir.) --
+q1,a,a,R,q1
+q1,b,b,R,q1
+q1,U,U,R,q1
+q1,V,V,R,q1
+q1,B,B,L,q2
+; --- q2: acha o ultimo simbolo livre da direita e marca ---------------
+q2,U,U,L,q2
+q2,V,V,L,q2
+q2,a,U,L,q3
+q2,b,V,L,q3
+q2,X,X,S,q_rejeita
+q2,Y,Y,S,q_rejeita
+; --- q3: volta ate a 1a metade ja marcada e reinicia a rodada ---------
+q3,a,a,L,q3
+q3,b,b,L,q3
+q3,X,X,R,q0
+q3,Y,Y,R,q0
+; --- q4: rebobina ate o inicio da fita (1a celula nao branca) ---------
+q4,a,a,L,q4
+q4,b,b,L,q4
+q4,X,X,L,q4
+q4,Y,Y,L,q4
+q4,U,U,L,q4
+q4,V,V,L,q4
+q4,Z,Z,L,q4
+q4,B,B,R,q5
+; --- q5: pega o 1o simbolo da 1a metade ainda nao comparado ----------
+q5,Z,Z,R,q5
+q5,X,Z,R,q6
+q5,Y,Z,R,q7
+q5,B,B,S,q_aceita
+q5,U,U,S,q_rejeita
+q5,V,V,S,q_rejeita
+; --- q6: lembra 'a'; procura o 1o nao comparado da 2a metade ---------
+q6,X,X,R,q6
+q6,Y,Y,R,q6
+q6,Z,Z,R,q6
+q6,U,Z,L,q4
+q6,V,V,S,q_rejeita
+q6,B,B,S,q_rejeita
+; --- q7: lembra 'b'; procura o 1o nao comparado da 2a metade ---------
+q7,X,X,R,q7
+q7,Y,Y,R,q7
+q7,Z,Z,R,q7
+q7,V,Z,L,q4
+q7,U,U,S,q_rejeita
+q7,B,B,S,q_rejeita
