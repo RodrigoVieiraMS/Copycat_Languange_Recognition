@@ -16,7 +16,7 @@ import os
 import sys
 import tempfile
 
-from simulador_mt import (ErroConfiguracao, ErroEntrada, MaquinaTuring,
+from main import (ErroConfiguracao, ErroEntrada, MaquinaTuring,
                           Resultado, simular)
 
 ARQ = "maquina_ww.txt"

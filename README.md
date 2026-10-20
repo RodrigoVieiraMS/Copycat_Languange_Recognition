@@ -11,31 +11,36 @@
 
 | Arquivo | Para que serve |
 |---|---|
-| `simulador_mt.py` | **Motor do simulador**: fita infinita, leitura/validação do `.txt`, execução, trace e limite de passos |
+| `main.py` | **Todo o simulador**: fita infinita, leitura/validação do `.txt`, execução, trace, limite de passos, interface gráfica e linha de comando |
 | `maquina_ww.txt` | **A MT da equipe** (regras de transição no layout exato do enunciado) |
 | `testes.py` | Bateria de testes automáticos (casos fixos + teste exaustivo + erros + loop) |
-| `gerar_diagrama.py` | Gera o diagrama de estados (`diagrama_estados.png`) a partir do próprio `.txt` |
-| `diagrama_estados.png/.svg` | Grafo de estados pronto para o slide |
+| `diagrama_estados.png` | Grafo de estados pronto para o slide |
 | `REVISAO_PROJETO.pdf` | Revisão completa: teoria, código, perguntas de arguição e o que estudar |
 
 ## 1.2 Requisitos
 - **Python 3.8 ou superior.** Nada para instalar (só biblioteca padrão).
-- (Opcional) Graphviz (`dot`) apenas se quiser regerar o diagrama.
 
 ## 1.3 Como rodar
 
+### Jeito mais fácil: interface gráfica
+```bash
+python main.py
+```
+Abre uma janela onde você **digita qualquer cadeia** (Enter ou botão EXECUTAR), clica nos exemplos prontos (abab, abaaba, abba, aba, aa, a, vazia), liga/desliga o passo a passo e muda o limite de passos. O resultado aparece em verde (ACEITA), vermelho (REJEITA) ou laranja (erro/limite). Também dá para escolher outro arquivo `.txt` de máquina. Usa `tkinter` (já vem com o Python no Windows/macOS; no Linux: `sudo apt install python3-tk`). Sem tkinter, cai automaticamente no modo terminal.
+
+### Pelo terminal
 ```bash
 # Forma geral
-python simulador_mt.py <arquivo_da_maquina.txt> [cadeia] [opções]
+python main.py <arquivo_da_maquina.txt> [cadeia] [opções]
 
 # Exemplos
-python simulador_mt.py maquina_ww.txt abab          # ACEITA  (w = ab)
-python simulador_mt.py maquina_ww.txt abba          # REJEITA
-python simulador_mt.py maquina_ww.txt aba           # REJEITA (tamanho ímpar)
-python simulador_mt.py maquina_ww.txt               # pergunta a cadeia (Enter vazio = cadeia vazia ε)
-python simulador_mt.py maquina_ww.txt abaaba -q     # sem trace, só o resultado
-python simulador_mt.py maquina_ww.txt abab -d 0.3   # trace com pausa de 0,3 s por passo (bom para a apresentação)
-python simulador_mt.py maquina_ww.txt abab -m 20    # limite de 20 passos (demonstra o aborto por loop/limite)
+python main.py maquina_ww.txt abab          # ACEITA  (w = ab)
+python main.py maquina_ww.txt abba          # REJEITA
+python main.py maquina_ww.txt aba           # REJEITA (tamanho ímpar)
+python main.py maquina_ww.txt               # pergunta a cadeia (Enter vazio = cadeia vazia ε)
+python main.py maquina_ww.txt abaaba -q     # sem trace, só o resultado
+python main.py maquina_ww.txt abab -d 0.3   # trace com pausa de 0,3 s por passo (bom para a apresentação)
+python main.py maquina_ww.txt abab -m 20    # limite de 20 passos (demonstra o aborto por loop/limite)
 
 # Rodar todos os testes
 python testes.py
@@ -282,7 +287,7 @@ Contra-exemplo `abba`: `XYVU` → compara `a` com `V` (b) ⇒ **REJEITA** (passo
 | `abc` | ⚠️ erro: símbolo fora do alfabeto | — |
 | `abab -m 20` | ⏹ limite de passos excedido | 20 |
 
-*Rodar:* `python simulador_mt.py maquina_ww.txt abab -d 0.3`
+*Rodar:* `python main.py` (interface gráfica) ou `python main.py maquina_ww.txt abab -d 0.3`
 
 ---
 
